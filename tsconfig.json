@@ -30,5 +30,8 @@
     {
       "path": "./tsconfig.node.json"
     }
-  ]
+  ],
+  // dayjs
+  "esModuleInterop": true,
+  "allowSyntheticDefaultImports": true,
 }
