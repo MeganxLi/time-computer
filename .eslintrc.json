@@ -32,6 +32,7 @@
     // Note: you must disable the base rule as it can report incorrect errors
     "no-shadow": "off",
     "@typescript-eslint/no-shadow": "off",
+    "import/no-extraneous-dependencies": "off",
     //無障礙
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/no-static-element-interactions": "off",
