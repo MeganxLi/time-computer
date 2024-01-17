@@ -23,7 +23,7 @@ function App() {
     setSelectTime((prev) => ({ ...prev, Date: today }))
   }, [])
 
-  const changeDate: DatePickerProps['onChange'] = (date, dateString) => {
+  const changeDate: DatePickerProps['onChange'] = (_date, dateString) => {
     setSelectTime((prev) => ({ ...prev, Date: dateString }))
   }
 
