@@ -6,7 +6,7 @@ import dayjs from 'dayjs'
 import type { Dayjs } from 'dayjs'
 import { TimePicker } from 'antd'
 import { Edit2 } from 'react-feather'
-import { dateFormat, format } from './constants/EnumType'
+import { dateFormat, diffTimeUnit, format } from './constants/EnumType'
 
 function App() {
   const [selectTime, setSelectTime] = useState<TimeType>({
@@ -16,19 +16,18 @@ function App() {
     EndTime: null,
   })
 
+  const [recordTimeList, setRecordTimeList] = useState<TimeListType[]>([])
+
   useEffect(() => {
     const today = dayjs().format(dateFormat)
     setSelectTime((prev) => ({ ...prev, Date: today }))
   }, [])
 
   const changeDate: DatePickerProps['onChange'] = (date, dateString) => {
-    console.log(date, dateString, '--', selectTime)
     setSelectTime((prev) => ({ ...prev, Date: dateString }))
   }
 
   const changeStartTime = (time: Dayjs | null) => {
-    console.log(time)
-
     setSelectTime((prev) => ({ ...prev, StartTime: time }))
   }
 
@@ -36,47 +35,87 @@ function App() {
     setSelectTime((prev) => ({ ...prev, EndTime: time }))
   }
 
+  const calcTimeDiff = () => {
+    const diffTime = Number(
+      dayjs(selectTime.EndTime).diff(selectTime.StartTime, diffTimeUnit, true).toFixed(2),
+    )
+    const Timestamp = dayjs().valueOf() // 取得時間戳
+    setRecordTimeList((prev) => {
+      const updatedList: TimeListType[] = [
+        {
+          Timestamp,
+          Date: selectTime.Date!,
+          StartTime: selectTime.StartTime,
+          EndTime: selectTime.EndTime,
+          DiffTime: diffTime,
+        },
+        ...prev,
+      ]
+      return updatedList
+    })
+  }
+
   return (
     <main>
       <div>
-        <span>日期</span>
-        <DatePicker
-          onChange={changeDate}
-          showToday
-          value={dayjs(selectTime.Date, dateFormat)}
-          format={dateFormat}
-          allowClear={false}
-          disabled={selectTime.DisabledDate}
-        />
-        <label onClick={() => {
-          setSelectTime((prev) => ({ ...prev, DisabledDate: !prev.DisabledDate }))
-        }}
-        >
-          <Edit2 />
-
-        </label>
+        <div>
+          <span>日期</span>
+          <DatePicker
+            onChange={changeDate}
+            showToday
+            value={dayjs(selectTime.Date, dateFormat)}
+            format={dateFormat}
+            allowClear={false}
+            disabled={selectTime.DisabledDate}
+          />
+          <label onClick={() => {
+            setSelectTime((prev) => ({ ...prev, DisabledDate: !prev.DisabledDate }))
+          }}
+          >
+            <Edit2 />
+          </label>
+        </div>
+        <div>
+          <span>開始時間</span>
+          <TimePicker
+            value={selectTime.StartTime}
+            format={format}
+            onChange={changeStartTime}
+            showNow={false}
+          />
+          <button type="button" onClick={() => changeStartTime(dayjs())}>此刻</button>
+        </div>
+        <div>
+          <span>結束時間</span>
+          <TimePicker
+            value={selectTime.EndTime}
+            format={format}
+            onChange={changeEndTime}
+            showNow={false}
+          />
+          <button type="button" onClick={() => changeEndTime(dayjs())}>此刻</button>
+        </div>
+        <button type="button" onClick={calcTimeDiff}>計算</button>
       </div>
+      <hr />
       <div>
-        <span>開始時間</span>
-        <TimePicker
-          value={selectTime.StartTime}
-          format={format}
-          onChange={changeStartTime}
-          showNow={false}
-        />
-        <button type="button" onClick={() => changeStartTime(dayjs())}>此刻</button>
+        <ul>
+          {recordTimeList.map((item) => (
+            <li key={item.Timestamp}>
+              <div>{item.Date}</div>
+              <div>
+                {selectTime.StartTime.format(format)}
+                -
+                {selectTime.StartTime.format(format)}
+              </div>
+              <div>
+                {item.DiffTime}
+                小時
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
-      <div>
-        <span>結束時間</span>
-        <TimePicker
-          value={selectTime.EndTime}
-          format={format}
-          onChange={changeEndTime}
-          showNow={false}
-        />
-        <button type="button" onClick={() => changeEndTime(dayjs())}>此刻</button>
-      </div>
-      <button type="button">計算</button>
 
     </main>
   )
