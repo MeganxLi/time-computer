@@ -5,10 +5,12 @@ import DatePicker, { DatePickerProps } from 'antd/es/date-picker'
 import dayjs from 'dayjs'
 import type { Dayjs } from 'dayjs'
 import { TimePicker } from 'antd'
+import { Edit2 } from 'react-feather'
 import { dateFormat, format } from './constants/EnumType'
 
 function App() {
   const [selectTime, setSelectTime] = useState<TimeType>({
+    DisabledDate: true,
     Date: null,
     StartTime: null,
     EndTime: null,
@@ -44,7 +46,15 @@ function App() {
           value={dayjs(selectTime.Date, dateFormat)}
           format={dateFormat}
           allowClear={false}
+          disabled={selectTime.DisabledDate}
         />
+        <label onClick={() => {
+          setSelectTime((prev) => ({ ...prev, DisabledDate: !prev.DisabledDate }))
+        }}
+        >
+          <Edit2 />
+
+        </label>
       </div>
       <div>
         <span>開始時間</span>
@@ -66,6 +76,7 @@ function App() {
         />
         <button type="button" onClick={() => changeEndTime(dayjs())}>此刻</button>
       </div>
+      <button type="button">計算</button>
 
     </main>
   )
