@@ -100,7 +100,7 @@ function App() {
           />
           <button type="button" onClick={() => changeEndTime(dayjs())}>此刻</button>
         </div>
-        <button type="button" onClick={calcTimeDiff}>計算</button>
+        <button type="button" onClick={calcTimeDiff} disabled={!selectTime.StartTime || !selectTime.EndTime}>計算</button>
       </div>
       <hr />
       <div>
@@ -109,9 +109,9 @@ function App() {
             <li key={item.Timestamp}>
               <div>{item.Date}</div>
               <div>
-                {selectTime.StartTime.format(format)}
+                {item.StartTime.format(format)}
                 -
-                {selectTime.EndTime.format(format)}
+                {item.EndTime.format(format)}
               </div>
               <div>
                 {item.DiffTime}
