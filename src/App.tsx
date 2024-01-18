@@ -5,7 +5,7 @@ import DatePicker, { DatePickerProps } from 'antd/es/date-picker'
 import dayjs from 'dayjs'
 import type { Dayjs } from 'dayjs'
 import { TimePicker } from 'antd'
-import { Edit2 } from 'react-feather'
+import { Code, Edit2 } from 'react-feather'
 import { dateFormat, diffTimeUnit, format } from './constants/EnumType'
 
 function App() {
@@ -33,6 +33,10 @@ function App() {
 
   const changeEndTime = (time: Dayjs | null) => {
     setSelectTime((prev) => ({ ...prev, EndTime: time }))
+  }
+
+  const exchangeTime = () => {
+    setSelectTime((prev) => ({ ...prev, StartTime: prev.EndTime, EndTime: prev.StartTime }))
   }
 
   const calcTimeDiff = () => {
@@ -85,6 +89,7 @@ function App() {
           />
           <button type="button" onClick={() => changeStartTime(dayjs())}>此刻</button>
         </div>
+        <p onClick={exchangeTime}><Code /></p>
         <div>
           <span>結束時間</span>
           <TimePicker
@@ -106,7 +111,7 @@ function App() {
               <div>
                 {selectTime.StartTime.format(format)}
                 -
-                {selectTime.StartTime.format(format)}
+                {selectTime.EndTime.format(format)}
               </div>
               <div>
                 {item.DiffTime}
