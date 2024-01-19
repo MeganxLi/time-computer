@@ -61,16 +61,20 @@ function App() {
       dayjs(selectTime.EndTime).diff(selectTime.StartTime, diffTimeUnit, true).toFixed(2),
     )
     const Timestamp = dayjs().valueOf() // 取得時間戳
-    const updatedList: TimeListType[] = [
-      {
-        Timestamp,
-        Date: selectTime.Date!,
-        StartTime: selectTime.StartTime.format(format),
-        EndTime: selectTime.EndTime.format(format),
-        DiffTime: diffTime,
-      },
-      ...recordTimeList,
-    ]
+
+    const newList: TimeListType = {
+      Timestamp,
+      Date: selectTime.Date!,
+      StartTime: selectTime.StartTime.format(format),
+      EndTime: selectTime.EndTime.format(format),
+      DiffTime: diffTime,
+    }
+
+    const updatedList: TimeListType[] = [newList, ...recordTimeList]
+    // 僅存 10 筆，刪除最舊的資料
+    if (updatedList.length > 10) {
+      updatedList.pop()
+    }
     setRecordTimeList(updatedList)
 
     // 移除 Time localStorage，存 List localStorage
