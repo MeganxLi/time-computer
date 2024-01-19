@@ -7,6 +7,7 @@ import type { Dayjs } from 'dayjs'
 import { TimePicker } from 'antd'
 import { Code, Edit2 } from 'react-feather'
 import { dateFormat, diffTimeUnit, format } from './constants/EnumType'
+import fetchDayjs from './utils/function'
 
 function App() {
   const [selectTime, setSelectTime] = useState<TimeType>({
@@ -19,9 +20,22 @@ function App() {
   const [recordTimeList, setRecordTimeList] = useState<TimeListType[]>([])
 
   useEffect(() => {
+    const localTime: TimeType = JSON.parse(localStorage.getItem('Time')!)
+
     const today = dayjs().format(dateFormat)
-    setSelectTime((prev) => ({ ...prev, Date: today }))
+    const isSameDay = localTime && dayjs(today).isSame(dayjs(localTime.Date), 'day')
+
+    setSelectTime({
+      DisabledDate: true,
+      Date: today,
+      StartTime: isSameDay ? fetchDayjs(localTime.StartTime) : null,
+      EndTime: isSameDay ? fetchDayjs(localTime.EndTime) : null,
+    })
   }, [])
+
+  useEffect(() => {
+    localStorage.setItem('Time', JSON.stringify(selectTime))
+  }, [selectTime])
 
   const changeDate: DatePickerProps['onChange'] = (_date, dateString) => {
     setSelectTime((prev) => ({ ...prev, Date: dateString }))
@@ -44,19 +58,17 @@ function App() {
       dayjs(selectTime.EndTime).diff(selectTime.StartTime, diffTimeUnit, true).toFixed(2),
     )
     const Timestamp = dayjs().valueOf() // 取得時間戳
-    setRecordTimeList((prev) => {
-      const updatedList: TimeListType[] = [
-        {
-          Timestamp,
-          Date: selectTime.Date!,
-          StartTime: selectTime.StartTime,
-          EndTime: selectTime.EndTime,
-          DiffTime: diffTime,
-        },
-        ...prev,
-      ]
-      return updatedList
-    })
+    const updatedList: TimeListType[] = [
+      {
+        Timestamp,
+        Date: selectTime.Date!,
+        StartTime: selectTime.StartTime,
+        EndTime: selectTime.EndTime,
+        DiffTime: diffTime,
+      },
+      ...recordTimeList,
+    ]
+    setRecordTimeList(updatedList)
   }
 
   return (
