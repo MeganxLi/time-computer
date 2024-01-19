@@ -7,7 +7,7 @@ import type { Dayjs } from 'dayjs'
 import { TimePicker } from 'antd'
 import { Code, Edit2 } from 'react-feather'
 import { dateFormat, diffTimeUnit, format } from './constants/EnumType'
-import fetchDayjs from './utils/function'
+import { fetchDayjs } from './utils/function'
 
 function App() {
   const [selectTime, setSelectTime] = useState<TimeType>({
@@ -21,6 +21,7 @@ function App() {
 
   useEffect(() => {
     const localTime: TimeType = JSON.parse(localStorage.getItem('Time')!)
+    const localTimeList: TimeListType[] = JSON.parse(localStorage.getItem('List')!)
 
     const today = dayjs().format(dateFormat)
     const isSameDay = localTime && dayjs(today).isSame(dayjs(localTime.Date), 'day')
@@ -31,6 +32,8 @@ function App() {
       StartTime: isSameDay ? fetchDayjs(localTime.StartTime) : null,
       EndTime: isSameDay ? fetchDayjs(localTime.EndTime) : null,
     })
+
+    setRecordTimeList(localTimeList || [])
   }, [])
 
   useEffect(() => {
@@ -62,13 +65,17 @@ function App() {
       {
         Timestamp,
         Date: selectTime.Date!,
-        StartTime: selectTime.StartTime,
-        EndTime: selectTime.EndTime,
+        StartTime: selectTime.StartTime.format(format),
+        EndTime: selectTime.EndTime.format(format),
         DiffTime: diffTime,
       },
       ...recordTimeList,
     ]
     setRecordTimeList(updatedList)
+
+    // 移除 Time localStorage，存 List localStorage
+    localStorage.removeItem('Time')
+    localStorage.setItem('List', JSON.stringify(updatedList))
   }
 
   return (
@@ -121,9 +128,9 @@ function App() {
             <li key={item.Timestamp}>
               <div>{item.Date}</div>
               <div>
-                {item.StartTime.format(format)}
+                {item.StartTime}
                 -
-                {item.EndTime.format(format)}
+                {item.EndTime}
               </div>
               <div>
                 {item.DiffTime}
