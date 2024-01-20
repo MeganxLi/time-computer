@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react'
 
-import './App.css'
 import DatePicker, { DatePickerProps } from 'antd/es/date-picker'
 import dayjs from 'dayjs'
 import type { Dayjs } from 'dayjs'
-import { TimePicker } from 'antd'
-import { Code, Edit2 } from 'react-feather'
+import { Popover, TimePicker } from 'antd'
+import { AlertCircle, Code, Edit2 } from 'react-feather'
 import { dateFormat, diffTimeUnit, format } from './constants/EnumType'
 import { fetchDayjs } from './utils/function'
+import TimeList from './constants/TimeList'
 
 function App() {
   const [selectTime, setSelectTime] = useState<TimeType>({
@@ -84,8 +84,8 @@ function App() {
 
   return (
     <main>
-      <div>
-        <div>
+      <div className="select-time">
+        <div className="select-time-item">
           <span>日期</span>
           <DatePicker
             onChange={changeDate}
@@ -95,14 +95,16 @@ function App() {
             allowClear={false}
             disabled={selectTime.DisabledDate}
           />
-          <label onClick={() => {
-            setSelectTime((prev) => ({ ...prev, DisabledDate: !prev.DisabledDate }))
-          }}
+          <label
+            className="edit-date"
+            onClick={() => {
+              setSelectTime((prev) => ({ ...prev, DisabledDate: !prev.DisabledDate }))
+            }}
           >
-            <Edit2 />
+            <Edit2 size={18} />
           </label>
         </div>
-        <div>
+        <div className="select-time-item">
           <span>開始時間</span>
           <TimePicker
             value={selectTime.StartTime}
@@ -110,10 +112,10 @@ function App() {
             onChange={changeStartTime}
             showNow={false}
           />
-          <button type="button" onClick={() => changeStartTime(dayjs())}>此刻</button>
+          <button className="button-secondary" type="button" onClick={() => changeStartTime(dayjs())}>此刻</button>
         </div>
-        <p onClick={exchangeTime}><Code /></p>
-        <div>
+        <p className="change-button" onClick={exchangeTime}><Code size={18} /></p>
+        <div className="select-time-item">
           <span>結束時間</span>
           <TimePicker
             value={selectTime.EndTime}
@@ -121,19 +123,29 @@ function App() {
             onChange={changeEndTime}
             showNow={false}
           />
-          <button type="button" onClick={() => changeEndTime(dayjs())}>此刻</button>
+          <button className="button-secondary" type="button" onClick={() => changeEndTime(dayjs())}>此刻</button>
         </div>
         <button type="button" onClick={calcTimeDiff} disabled={!selectTime.StartTime || !selectTime.EndTime}>計算</button>
       </div>
-      <hr />
-      <div>
-        <ul>
+      <div className="time-list">
+        <div className="time-list-section">
+          時間紀錄
+          <Popover content="僅紀錄10筆" className="time-list-popover">
+            <button type="button"><AlertCircle size={14} /></button>
+          </Popover>
+
+        </div>
+        <hr />
+        <ul className="time-list-header">
+          {TimeList.map((item) => (<li key={item}>{item}</li>))}
+        </ul>
+        <ul className="time-list-body">
           {recordTimeList.map((item) => (
-            <li key={item.Timestamp}>
+            <li key={item.Timestamp} className="time-list-item">
               <div>{item.Date}</div>
               <div>
                 {item.StartTime}
-                -
+                &nbsp; - &nbsp;
                 {item.EndTime}
               </div>
               <div>
