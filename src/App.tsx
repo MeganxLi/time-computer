@@ -9,7 +9,7 @@ import { dateFormat, diffTimeUnit, format } from './constants/EnumType'
 import { fetchDayjs } from './utils/function'
 import TimeList from './constants/TimeList'
 
-function App() {
+const App = () => {
   const [selectTime, setSelectTime] = useState<TimeType>({
     DisabledDate: true,
     Date: null,
@@ -156,7 +156,6 @@ function App() {
           ))}
         </ul>
       </div>
-
     </main>
   )
 }
