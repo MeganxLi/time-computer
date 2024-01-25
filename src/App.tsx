@@ -17,12 +17,15 @@ const App = () => {
     EndTime: null,
   })
 
-  const [recordTimeList, setRecordTimeList] = useState<TimeListType[]>([])
-  const [timeUnit, setTimeUnit] = useState<TimeUnitType>(diffTimeUnit)
+  // 不使用 useEffect 是因為會出現 UI 閃爍
+  const localTimeList: TimeListType[] = JSON.parse(localStorage.getItem('List')!)
+  const [recordTimeList, setRecordTimeList] = useState<TimeListType[]>(localTimeList || [])
+
+  const localTimeUnit: TimeUnitType = JSON.parse(localStorage.getItem('TimeUnit')!)
+  const [timeUnit, setTimeUnit] = useState<TimeUnitType>(localTimeUnit || diffTimeUnit)
 
   useEffect(() => {
     const localTime: TimeType = JSON.parse(localStorage.getItem('Time')!)
-    const localTimeList: TimeListType[] = JSON.parse(localStorage.getItem('List')!)
 
     const today = dayjs().format(dateFormat)
     const isSameDay = localTime && dayjs(today).isSame(dayjs(localTime.Date), 'day')
@@ -33,13 +36,15 @@ const App = () => {
       StartTime: isSameDay ? fetchDayjs(localTime.StartTime) : null,
       EndTime: isSameDay ? fetchDayjs(localTime.EndTime) : null,
     })
-
-    setRecordTimeList(localTimeList || [])
   }, [])
 
   useEffect(() => {
     localStorage.setItem('Time', JSON.stringify(selectTime))
   }, [selectTime])
+
+  useEffect(() => {
+    localStorage.setItem('TimeUnit', JSON.stringify(timeUnit))
+  }, [timeUnit])
 
   const changeDate: DatePickerProps['onChange'] = (_date, dateString) => {
     setSelectTime((prev) => ({ ...prev, Date: dateString }))
@@ -153,7 +158,7 @@ const App = () => {
         <hr />
         <div className='Tags'>
           <Segmented
-            defaultValue={TimeUnitCH[diffTimeUnit]}
+            value={TimeUnitCH[timeUnit]}
             onChange={(value) => {
               const parentEnum: TimeUnit | undefined = (Object.keys(TimeUnit) as (keyof typeof TimeUnit)[]).find(
                 key => TimeUnitCH[TimeUnit[key]] === value
