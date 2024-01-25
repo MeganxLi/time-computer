@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react'
 import DatePicker, { DatePickerProps } from 'antd/es/date-picker'
 import dayjs from 'dayjs'
 import type { Dayjs } from 'dayjs'
-import { Popover, TimePicker } from 'antd'
+import { Popover, Segmented, TimePicker } from 'antd'
 import { AlertCircle, Code, Edit2 } from 'react-feather'
-import { dateFormat, diffTimeUnit, format } from './constants/EnumType'
+import { TimeUnit, TimeUnitCH, dateFormat, diffTimeUnit, format } from './constants/EnumType'
 import { fetchDayjs } from './utils/function'
 import TimeList from './constants/TimeList'
 
@@ -18,6 +18,7 @@ const App = () => {
   })
 
   const [recordTimeList, setRecordTimeList] = useState<TimeListType[]>([])
+  const [timeUnit, setTimeUnit] = useState<TimeUnitType>(diffTimeUnit)
 
   useEffect(() => {
     const localTime: TimeType = JSON.parse(localStorage.getItem('Time')!)
@@ -58,7 +59,7 @@ const App = () => {
 
   const calcTimeDiff = () => {
     const diffTime = Number(
-      dayjs(selectTime.EndTime).diff(selectTime.StartTime, diffTimeUnit, true).toFixed(2),
+      dayjs(selectTime.EndTime).diff(selectTime.StartTime, diffTimeUnit),
     )
     const Timestamp = dayjs().valueOf() // 取得時間戳
 
@@ -80,6 +81,20 @@ const App = () => {
     // 移除 Time localStorage，存 List localStorage
     localStorage.removeItem('Time')
     localStorage.setItem('List', JSON.stringify(updatedList))
+  }
+
+  const showTimeDiff = (diff: number): number | string | undefined => {
+    switch (timeUnit) {
+      case TimeUnit.H:
+        return (diff / 60).toFixed(2);
+      case TimeUnit.M:
+        return diff.toFixed(0);
+      case TimeUnit.S:
+        return (diff * 60).toFixed(0);
+      default:
+        return undefined;
+    }
+
   }
 
   return (
@@ -131,11 +146,26 @@ const App = () => {
         <div className="time-list-section">
           時間紀錄
           <Popover content="僅紀錄10筆" className="time-list-popover">
-            <button type="button"><AlertCircle size={14} /></button>
+            <button type="button" className='tooltip'><AlertCircle size={14} /></button>
           </Popover>
 
         </div>
         <hr />
+        <div className='Tags'>
+          <Segmented
+            defaultValue={TimeUnitCH[diffTimeUnit]}
+            onChange={(value) => {
+              const parentEnum: TimeUnit | undefined = (Object.keys(TimeUnit) as (keyof typeof TimeUnit)[]).find(
+                key => TimeUnitCH[TimeUnit[key]] === value
+              ) as TimeUnit | undefined
+
+              if (parentEnum) {
+                setTimeUnit(TimeUnit[parentEnum as unknown as keyof typeof TimeUnit])
+              }
+            }}
+            options={Object.keys(TimeUnit).map((key) => TimeUnitCH[TimeUnit[key as keyof typeof TimeUnit]])}
+          />
+        </div>
         <ul className="time-list-header">
           {TimeList.map((item) => (<li key={item}>{item}</li>))}
         </ul>
@@ -149,8 +179,7 @@ const App = () => {
                 {item.EndTime}
               </div>
               <div>
-                {item.DiffTime}
-                小時
+                {showTimeDiff(item.DiffTime) ? `${showTimeDiff(item.DiffTime)}${TimeUnitCH[timeUnit]}` : "錯誤"}
               </div>
             </li>
           ))}
