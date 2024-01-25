@@ -38,13 +38,7 @@ body {
   margin: 0;
   display: flex;
   place-items: center;
-  min-width: 320px;
   min-height: 100vh;
-}
-
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
 }
 
 button {
@@ -159,6 +153,10 @@ hr {
   .time-list-item {
     padding-bottom: 0.45rem;
   }
+}
+
+footer {
+  margin-top: 2rem;
 }
 
 /***  ant design  ***/
