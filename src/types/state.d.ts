@@ -10,5 +10,7 @@ type TimeListType = {
   Date: string,
   StartTime: Dayjs,
   EndTime: Dayjs,
-  DiffTime: Dayjs,
+  DiffTime: number,
 }
+
+type TimeUnitType = 'hours' | 'minutes' | 'seconds'
