@@ -18,11 +18,25 @@
   --color-secondary-transparency: rgba(172, 153, 153, 0.6);
 }
 
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-height: 100vh;
+}
+
 #root {
   max-width: 1280px;
+  min-height: 100vmax;
   margin: 0 auto;
   padding: 2rem;
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  @media (max-width: 480px) {
+    font-size: 0.9rem;
+  }
 }
 
 a {
@@ -32,13 +46,6 @@ a {
 }
 a:hover {
   color: #535bf2;
-}
-
-body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-height: 100vh;
 }
 
 button {
@@ -52,6 +59,11 @@ button {
   cursor: pointer;
   transition: border-color 0.25s;
   color: #fff;
+  min-width: 3.5rem;
+  @media (max-width: 480px) {
+    font-size: 1rem;
+    padding: 0.4rem;
+  }
 }
 button:hover:not(:disabled) {
   border-color: var(--color-primary);
@@ -68,19 +80,6 @@ button.button-secondary {
   background-color: transparent;
   border: 1.5px solid var(--color-secondary);
   color: var(--color-secondary);
-}
-
-@media (prefers-color-scheme: light) {
-  :root {
-    color: #213547;
-    background-color: #ffffff;
-  }
-  a:hover {
-    color: #747bff;
-  }
-  button {
-    background-color: #f9f9f9;
-  }
 }
 
 ul,
@@ -102,12 +101,14 @@ hr {
 
   .select-time-item {
     display: grid;
-    grid-template-columns: 80px 150px 68px;
+    grid-template-columns: 1fr 2.5fr 1fr;
     align-items: baseline;
     gap: 1rem;
+    width: 100%;
     span {
       display: flex;
       justify-self: end;
+      text-align: end;
     }
   }
   .edit-date {
@@ -135,6 +136,9 @@ hr {
   .time-list-section {
     color: var(--color-primary);
     font-size: 1.1rem;
+    @media (max-width: 480px) {
+      font-size: 1rem;
+    }
   }
   .time-list-popover {
     color: var(--color-primary);
@@ -148,7 +152,8 @@ hr {
   .time-list-header,
   .time-list-item {
     display: grid;
-    grid-template-columns: 100px 200px 100px;
+    gap: 0.5rem;
+    grid-template-columns: 25% 50% 25%;
   }
   .time-list-item {
     padding-bottom: 0.45rem;
