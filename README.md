@@ -1,30 +1,36 @@
-# React + TypeScript + Vite
+# Time Computer 時間計算機
+計算當日上班總時間，可切換時、分和秒單位
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+<img width="983" alt="image" src="https://github.com/MeganxLi/time-computer/assets/87239200/190e8bd4-8104-48cd-b4f7-1b7f0a60cea9">
 
-Currently, two official plugins are available:
+<p align="center"><a href="https://meganxli.github.io/dotted-sign/" target="_blank">Demo website</a></p>
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## Description
 
-## Expanding the ESLint configuration
+### Programming Languages
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- JavaScript
+- TypeScript
+- Vite
 
-- Configure the top-level `parserOptions` property like this:
+### Frontend
 
-```js
-export default {
-  // other rules...
-  parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-  },
-}
+- [React.js](https://reactjs.org/)
+- [Vite](https://vitejs.dev/)
+- [Ant Design](https://ant.design/)
+- [EsLint](https://eslint.org/)
+
+
+## Building
+
+### Install Packages
+
+```
+$ npm install
 ```
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### Start Dev Server
+
+```
+$ npm run start
+```
