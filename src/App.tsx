@@ -3,11 +3,12 @@ import { useEffect, useState } from 'react'
 import DatePicker, { DatePickerProps } from 'antd/es/date-picker'
 import dayjs from 'dayjs'
 import type { Dayjs } from 'dayjs'
-import { Popover, Segmented, TimePicker } from 'antd'
+import { ConfigProvider, Popover, Segmented, TimePicker } from 'antd'
 import { AlertCircle, Code, Edit2 } from 'react-feather'
 import { TimeUnit, TimeUnitCH, dateFormat, diffTimeUnit, format } from './constants/EnumType'
 import { fetchDayjs } from './utils/function'
 import TimeList from './constants/TimeList'
+import { time_picker_style, time_picker_theme } from './constants/ThemeStyle'
 
 const App = () => {
   const [selectTime, setSelectTime] = useState<TimeType>({
@@ -105,46 +106,55 @@ const App = () => {
   return (
     <main>
       <div className="select-time">
-        <div className="select-time-item">
-          <span>日期</span>
-          <DatePicker
-            onChange={changeDate}
-            showToday
-            value={dayjs(selectTime.Date, dateFormat)}
-            format={dateFormat}
-            allowClear={false}
-            disabled={selectTime.DisabledDate}
-          />
-          <label
-            className="edit-date"
-            onClick={() => {
-              setSelectTime((prev) => ({ ...prev, DisabledDate: !prev.DisabledDate }))
-            }}
-          >
-            <Edit2 size={18} />
-          </label>
-        </div>
-        <div className="select-time-item">
-          <span>開始時間</span>
-          <TimePicker
-            value={selectTime.StartTime}
-            format={format}
-            onChange={changeStartTime}
-            showNow={false}
-          />
-          <button className="button-secondary" type="button" onClick={() => changeStartTime(dayjs())}>此刻</button>
-        </div>
-        <p className="change-button" onClick={exchangeTime}><Code size={18} /></p>
-        <div className="select-time-item">
-          <span>結束時間</span>
-          <TimePicker
-            value={selectTime.EndTime}
-            format={format}
-            onChange={changeEndTime}
-            showNow={false}
-          />
-          <button className="button-secondary" type="button" onClick={() => changeEndTime(dayjs())}>此刻</button>
-        </div>
+
+        <ConfigProvider theme={time_picker_theme}>
+          <div className="select-time-item">
+            <span>日期</span>
+
+            <DatePicker
+              onChange={changeDate}
+              showToday
+              value={dayjs(selectTime.Date, dateFormat)}
+              format={dateFormat}
+              allowClear={false}
+              disabled={selectTime.DisabledDate}
+              style={time_picker_style}
+            />
+
+            <label
+              className="edit-date"
+              onClick={() => {
+                setSelectTime((prev) => ({ ...prev, DisabledDate: !prev.DisabledDate }))
+              }}
+            >
+              <Edit2 size={18} />
+            </label>
+          </div>
+          <div className="select-time-item">
+            <span>開始時間</span>
+            <TimePicker
+              value={selectTime.StartTime}
+              format={format}
+              onChange={changeStartTime}
+              showNow={false}
+              style={time_picker_style}
+            />
+            <button className="button-secondary" type="button" onClick={() => changeStartTime(dayjs())}>此刻</button>
+          </div>
+          <p className="change-button" onClick={exchangeTime}><Code size={18} /></p>
+          <div className="select-time-item">
+            <span>結束時間</span>
+            <TimePicker
+              value={selectTime.EndTime}
+              format={format}
+              onChange={changeEndTime}
+              showNow={false}
+              style={time_picker_style}
+            />
+            <button className="button-secondary" type="button" onClick={() => changeEndTime(dayjs())}>此刻</button>
+          </div>
+
+        </ConfigProvider>
         <button type="button" onClick={calcTimeDiff} disabled={!selectTime.StartTime || !selectTime.EndTime}>計算</button>
       </div>
       <div className="time-list">
