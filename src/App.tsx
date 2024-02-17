@@ -103,6 +103,11 @@ const App = () => {
 
   }
 
+  const cleanList = () => {
+    setRecordTimeList([])
+    localStorage.removeItem('List')
+  }
+
   return (
     <main>
       <div className="select-time">
@@ -166,20 +171,23 @@ const App = () => {
 
         </div>
         <hr />
-        <div className='Tags'>
-          <Segmented
-            value={TimeUnitCH[timeUnit]}
-            onChange={(value) => {
-              const parentEnum: TimeUnit | undefined = (Object.keys(TimeUnit) as (keyof typeof TimeUnit)[]).find(
-                key => TimeUnitCH[TimeUnit[key]] === value
-              ) as TimeUnit | undefined
+        <div className='time-list-action'>
+          <span className='time-list-action-clean' onClick={cleanList}>清除紀錄</span>
+          <div className='time-list-action-tags'>
+            <Segmented
+              value={TimeUnitCH[timeUnit]}
+              onChange={(value) => {
+                const parentEnum: TimeUnit | undefined = (Object.keys(TimeUnit) as (keyof typeof TimeUnit)[]).find(
+                  key => TimeUnitCH[TimeUnit[key]] === value
+                ) as TimeUnit | undefined
 
-              if (parentEnum) {
-                setTimeUnit(TimeUnit[parentEnum as unknown as keyof typeof TimeUnit])
-              }
-            }}
-            options={Object.keys(TimeUnit).map((key) => TimeUnitCH[TimeUnit[key as keyof typeof TimeUnit]])}
-          />
+                if (parentEnum) {
+                  setTimeUnit(TimeUnit[parentEnum as unknown as keyof typeof TimeUnit])
+                }
+              }}
+              options={Object.keys(TimeUnit).map((key) => TimeUnitCH[TimeUnit[key as keyof typeof TimeUnit]])}
+            />
+          </div>
         </div>
         <ul className="time-list-header">
           {TimeList.map((item) => (<li key={item}>{item}</li>))}
