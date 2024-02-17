@@ -16,6 +16,7 @@
   --color-primary: #5f5f5f;
   --color-secondary: #ac9999;
   --color-secondary-transparency: rgba(172, 153, 153, 0.6);
+  --color-gray: gray;
 }
 
 body {
@@ -131,12 +132,26 @@ hr {
   }
 }
 
-.Tags {
+.time-list-action {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  .time-list-action-clean {
+    font-size: 0.8rem;
+    cursor: pointer;
+    color: var(--color-gray);
+    &:hover {
+      color: var(--color-secondary);
+    }
+  }
+  .time-list-action-tags {
+    display: flex;
+    justify-content: flex-end;
 
-  :where(.css-dev-only-do-not-override-zl9ks2).ant-segmented .ant-segmented-item {
-    color: var(--color-primary);
+    :where(.css-dev-only-do-not-override-zl9ks2).ant-segmented .ant-segmented-item {
+      color: var(--color-primary);
+    }
   }
 }
 
