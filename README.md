@@ -1,9 +1,10 @@
 # Time Computer 時間計算機
-計算當日上班總時間，可切換時、分和秒單位
+
+計算當日上班總時間，可切換時、分和秒單位，紀錄近 10 筆時間。
 
 <img width="983" alt="image" src="https://github.com/MeganxLi/time-computer/assets/87239200/190e8bd4-8104-48cd-b4f7-1b7f0a60cea9">
 
-<p align="center"><a href="https://meganxli.github.io/dotted-sign/" target="_blank">Demo website</a></p>
+<p align="center"><a href="https://meganxli.github.io/time-computer/" target="_blank">Demo website</a></p>
 
 ## Description
 
@@ -19,7 +20,6 @@
 - [Vite](https://vitejs.dev/)
 - [Ant Design](https://ant.design/)
 - [EsLint](https://eslint.org/)
-
 
 ## Building
 
