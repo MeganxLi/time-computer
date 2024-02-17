@@ -52,11 +52,11 @@ const App = () => {
   }
 
   const changeStartTime = (time: Dayjs | null) => {
-    setSelectTime((prev) => ({ ...prev, StartTime: time }))
+    setSelectTime((prev) => ({ ...prev, StartTime: time?.startOf(TimeUnit.M) }))
   }
 
   const changeEndTime = (time: Dayjs | null) => {
-    setSelectTime((prev) => ({ ...prev, EndTime: time }))
+    setSelectTime((prev) => ({ ...prev, EndTime: time?.startOf(TimeUnit.M) }))
   }
 
   const exchangeTime = () => {
