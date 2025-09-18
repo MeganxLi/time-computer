@@ -51,12 +51,8 @@ const App = () => {
     setSelectTime((prev) => ({ ...prev, Date: dateString }))
   }
 
-  const changeStartTime = (time: Dayjs | null) => {
-    setSelectTime((prev) => ({ ...prev, StartTime: time?.startOf(TimeUnit.M) }))
-  }
-
-  const changeEndTime = (time: Dayjs | null) => {
-    setSelectTime((prev) => ({ ...prev, EndTime: time?.startOf(TimeUnit.M) }))
+  const changeTime = (time: Dayjs | null, field: TimeListEnum.START | TimeListEnum.END) => {
+    setSelectTime((prev) => ({ ...prev, [field]: time?.startOf(TimeUnit.M) }))
   }
 
   const exchangeTime = () => {
@@ -146,13 +142,13 @@ const App = () => {
             <TimePicker
               value={selectTime.StartTime}
               format={format}
-              onChange={changeStartTime}
+              onChange={(value)=>changeTime(value, TimeListEnum.START)}
               showNow={false}
               style={time_picker_style}
               inputReadOnly={false}
               onBlur={(e)=>handleBlur(e, TimeListEnum.START)}
             />
-            <button className="button-secondary" type="button" onClick={() => changeStartTime(dayjs())}>此刻</button>
+            <button className="button-secondary" type="button" onClick={() => changeTime(dayjs(),TimeListEnum.START)}>此刻</button>
           </div>
           <p className="change-button" onClick={exchangeTime}><Code size={18} /></p>
           <div className="select-time-item">
@@ -160,12 +156,12 @@ const App = () => {
             <TimePicker
               value={selectTime.EndTime}
               format={format}
-              onChange={changeEndTime}
+              onChange={(value)=>changeTime(value, TimeListEnum.END)}
               showNow={false}
               style={time_picker_style}
               onBlur={(e)=>handleBlur(e, TimeListEnum.END)}
             />
-            <button className="button-secondary" type="button" onClick={() => changeEndTime(dayjs())}>此刻</button>
+            <button className="button-secondary" type="button" onClick={() => changeTime(dayjs(),TimeListEnum.END)}>此刻</button>
           </div>
 
         </ConfigProvider>
