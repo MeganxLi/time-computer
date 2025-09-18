@@ -106,7 +106,9 @@ const App = () => {
 
   const handleBlur=(e:React.FocusEvent<HTMLInputElement>, field: TimeListEnum.START | TimeListEnum.END )=>{
     const startVal = e.target.value;
-    const parsed = dayjs(startVal, 'H:mm', true);
+    
+    // 新增判斷 12 還是 24 小時制， 12小時制取得最後一個數字是不是 m (ex: 09:32 am or 08:35 pm)
+    const parsed = dayjs(startVal, startVal.slice(-1)==='m' ? 'hh:mm a' : 'H:mm', true);
     if (parsed.isValid()) {
       setSelectTime((prev) => ({ ...prev, [field]: parsed?.startOf(TimeUnit.M) }))
     } 
