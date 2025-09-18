@@ -1,12 +1,19 @@
 export const dateFormat = 'YYYY/MM/DD'
-export const format = 'HH:mm a'
+export const format = 'hh:mm a'
 export const maxLength = 10
+
+export enum TimeListEnum { 
+  START='StartTime',
+  END='EndTime'
+}
 
 export enum TimeUnit {
   H = 'hours',
   M = 'minutes',
   S = 'seconds',
+  
 }
+
 export const diffTimeUnit: TimeUnitType = TimeUnit.M
 
 export const TimeUnitCH = {
@@ -14,3 +21,4 @@ export const TimeUnitCH = {
   [TimeUnit.M]: "分",
   [TimeUnit.S]: "秒",
 } as const
+

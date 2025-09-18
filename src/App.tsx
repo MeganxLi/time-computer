@@ -5,7 +5,7 @@ import dayjs from 'dayjs'
 import type { Dayjs } from 'dayjs'
 import { ConfigProvider, Popover, Segmented, TimePicker } from 'antd'
 import { AlertCircle, Code, Edit2 } from 'react-feather'
-import { TimeUnit, TimeUnitCH, dateFormat, diffTimeUnit, format } from './constants/EnumType'
+import { TimeListEnum, TimeUnit, TimeUnitCH, dateFormat, diffTimeUnit, format } from './constants/EnumType'
 import { fetchDayjs } from './utils/function'
 import TimeList from './constants/TimeList'
 import { time_picker_style, time_picker_theme } from './constants/ThemeStyle'
@@ -108,6 +108,14 @@ const App = () => {
     localStorage.removeItem('List')
   }
 
+  const handleBlur=(e:React.FocusEvent<HTMLInputElement>, field: TimeListEnum.START | TimeListEnum.END )=>{
+    const startVal = e.target.value;
+    const parsed = dayjs(startVal, 'H:mm', true);
+    if (parsed.isValid()) {
+      setSelectTime((prev) => ({ ...prev, [field]: parsed?.startOf(TimeUnit.M) }))
+    } 
+  }
+
   return (
     <main>
       <div className="select-time">
@@ -115,7 +123,6 @@ const App = () => {
         <ConfigProvider theme={time_picker_theme}>
           <div className="select-time-item">
             <span>日期</span>
-
             <DatePicker
               onChange={changeDate}
               showToday
@@ -125,7 +132,6 @@ const App = () => {
               disabled={selectTime.DisabledDate}
               style={time_picker_style}
             />
-
             <label
               className="edit-date"
               onClick={() => {
@@ -143,6 +149,8 @@ const App = () => {
               onChange={changeStartTime}
               showNow={false}
               style={time_picker_style}
+              inputReadOnly={false}
+              onBlur={(e)=>handleBlur(e, TimeListEnum.START)}
             />
             <button className="button-secondary" type="button" onClick={() => changeStartTime(dayjs())}>此刻</button>
           </div>
@@ -155,6 +163,7 @@ const App = () => {
               onChange={changeEndTime}
               showNow={false}
               style={time_picker_style}
+              onBlur={(e)=>handleBlur(e, TimeListEnum.END)}
             />
             <button className="button-secondary" type="button" onClick={() => changeEndTime(dayjs())}>此刻</button>
           </div>
